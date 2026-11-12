@@ -53,6 +53,12 @@ def test_estrategia_zona_abstracta():
     (5, "urbana", "normal", 7, None, 11000),       # CP-23: Domingo (d=7) suma recargo de fin de semana
     (5, "urbana", "normal", 5, None, 9000),        # CP-24: Viernes (d=5) sin recargo de fin de semana
     (2, "nacional", "frecuente", 1, None, 8000),   # CP-25: Tramo 1 + nacional + frecuente (6000*1.4*0.95=7980 -> 8000)
+    # CAMBIO=1 (cliente empresarial). Caso 1: peso <= 10 mantiene recargo de zona.
+    # 9000 -> +10% rural=9900 -> -12% empresarial=8712 -> redondeo=8700
+    (5, "rural", "empresarial", 1, None, 8700),
+    # CAMBIO=1. Caso 2: peso > 10 exonera el recargo de zona (nacional NO se aplica).
+    # 9800 (base) -> zona exonerada=9800 -> -12% empresarial=8624 -> redondeo=8600
+    (11, "nacional", "empresarial", 1, None, 8600),
 ])
 def test_calculo_costos(p, z, c, d, cup, esperado):
     assert calc(p, z, c, d, cup=cup) == esperado
