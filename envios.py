@@ -29,7 +29,7 @@ def calc(p, z, c, d, cup=None, flag=False):
     if c == "frecuente":
         t = t - t * 0.05
     if c == "vip":
-        t = t - t * DESC_VIP
+        t = t - t * CONFIG["DESC_VIP"]
     if cup != None:
         if cup == "ENVIO10":
             t = t - t * 0.10
