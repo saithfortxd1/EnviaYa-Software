@@ -27,6 +27,7 @@ TARIFA_TRAMO_2 = 9000
 TARIFA_KG_EXCEDENTE = 800
 DESC_FRECUENTE = 0.05
 DESC_CUPON_ENVIO10 = 0.10
+DESC_EMPRESARIAL = 0.12
 TARIFA_MINIMA = 5000
 DIA_MINIMO = 1
 DIA_MAXIMO = 7
@@ -107,9 +108,16 @@ def _aplicar_descuentos(tarifa, c, cup):
         tarifa = tarifa - tarifa * DESC_FRECUENTE
     if c == "vip":
         tarifa = tarifa - tarifa * CONFIG["DESC_VIP"]
+    if c == "empresarial":
+        tarifa = tarifa - tarifa * DESC_EMPRESARIAL
     if cup == CUPON_ENVIO10:
         tarifa = tarifa - tarifa * DESC_CUPON_ENVIO10
     return tarifa
+
+
+def _exonerar_recargo_zona(c, p):
+    """El cliente empresarial exonera el recargo de zona si el peso supera L2."""
+    return c == "empresarial" and p > CONFIG["L2"]
 
 
 def _aplicar_tarifa_minima(tarifa):
@@ -134,7 +142,8 @@ def calc(p, z, c, d, cup=None):
     _validar_cupon(cup)
 
     tarifa = _calcular_tarifa_base(p)
-    tarifa = _ESTRATEGIAS_ZONA[z].calcular(tarifa)
+    if not _exonerar_recargo_zona(c, p):
+        tarifa = _ESTRATEGIAS_ZONA[z].calcular(tarifa)
     tarifa = _aplicar_recargo_fin_de_semana(tarifa, d)
     tarifa = _aplicar_descuentos(tarifa, c, cup)
     tarifa = _aplicar_tarifa_minima(tarifa)
