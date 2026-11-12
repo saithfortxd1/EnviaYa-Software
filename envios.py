@@ -80,7 +80,8 @@ def _validar_zona(z):
 
 
 def _validar_dia(d):
-    if not isinstance(d, int) or isinstance(d, bool) or not (DIA_MINIMO <= d <= DIA_MAXIMO):
+    es_entero = isinstance(d, int) and not isinstance(d, bool)
+    if not es_entero or not (DIA_MINIMO <= d <= DIA_MAXIMO):
         raise ValueError("dia invalido")
 
 
@@ -127,7 +128,8 @@ def _aplicar_tarifa_minima(tarifa):
 def _redondear(tarifa):
     """Redondeo comercial al múltiplo de 100 más cercano (los 50 suben)."""
     factor = Decimal(str(tarifa)) / UNIDAD_REDONDEO
-    return int(factor.quantize(Decimal("1"), rounding=ROUND_HALF_UP)) * UNIDAD_REDONDEO
+    redondeado = factor.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    return int(redondeado) * UNIDAD_REDONDEO
 
 
 def calc(p, z, c, d, cup=None):
