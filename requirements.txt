@@ -1,0 +1,9 @@
+# Dependencias de pruebas y cobertura para EnvíaYa
+pytest>=8.0.0
+pytest-cov>=5.0.0
+
+# Configuración de reportes detallados de cobertura:
+# - Terminal: líneas sin cubrir + ramas faltantes
+# - HTML:    htmlcov/index.html
+# - XML:     coverage.xml (integración con CI)
+# Los addopts se definen en pytest.ini
