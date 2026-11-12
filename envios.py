@@ -29,8 +29,8 @@ def calc(p, z, c, d, cup=None, flag=False):
         t = t + t * CONFIG["RECARGO_RURAL"]
     elif z == "nacional":
         t = t + t * CONFIG["RECARGO_NACIONAL"]
-    # fin de semana
-    if d > 6:
+    # fin de semana (sabado=6 y domingo=7), antes de los descuentos
+    if d >= 6:
         t = t + CONFIG["RECARGO_FINDE"]
     if c == "frecuente":
         t = t - t * 0.05
