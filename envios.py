@@ -1,3 +1,6 @@
+from decimal import Decimal, ROUND_HALF_UP
+
+
 CONFIG = {
     "L1": 3,
     "L2": 10,
@@ -43,5 +46,6 @@ def calc(p, z, c, d, cup=None, flag=False):
         t = 5000
     if flag:
         print("costo:", t)
-    # redondeo comercial al multiplo de 100 mas cercano (los 50 suben)
-    return int(t / 100 + 0.5) * 100
+    # redondeo comercial estandar (ROUND_HALF_UP) con Decimal para evitar
+    # errores de punto flotante (los 50 suben)
+    return int((Decimal(str(t)) / 100).quantize(Decimal("1"), rounding=ROUND_HALF_UP)) * 100
